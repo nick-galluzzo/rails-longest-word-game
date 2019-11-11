@@ -4,6 +4,22 @@ require 'json'
 class GamesController < ApplicationController
   ALPHABET = ('a'..'z').to_a
 
+  def new
+    @letters = []
+    @letters = generate_letters(@letters)
+  end
+
+  def score
+    @attempt = params[:word]
+    @grid = params[:letters]
+    @found = valid_word(@attempt)
+    @valid = valid_chars?(@grid, @attempt)
+
+    @result = define_result(@attempt, @grid)
+  end
+
+  private
+
   def generate_letters(letters_arr)
     10.times do
       letters_arr << ALPHABET[rand(ALPHABET.length)]
@@ -35,19 +51,5 @@ class GamesController < ApplicationController
     end
 
     @result
-  end
-
-  def new
-    @letters = []
-    @letters = generate_letters(@letters)
-  end
-
-  def score
-    @attempt = params[:word]
-    @grid = params[:letters]
-    @found = valid_word(@attempt)
-    @valid = valid_chars?(@grid, @attempt)
-
-    @result = define_result(@attempt, @grid)
   end
 end
