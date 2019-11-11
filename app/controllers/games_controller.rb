@@ -30,13 +30,13 @@ class GamesController < ApplicationController
 
   def valid_chars?(letters, attempt)
     attempt = attempt.downcase.chars
-    attempt.all? { |char| attempt.count(char) <= letters.count(char)}
+    attempt.all? { |char| attempt.count(char) <= letters.count(char) }
   end
 
   def valid_word(attempt)
     url = "https://wagon-dictionary.herokuapp.com/#{attempt}"
-    serialized_words = open(url).read
-    words = JSON.parse(serialized_words)
+    response = RestClient.get(url)
+    words = JSON.parse(response.body)
 
     words['found']
   end
